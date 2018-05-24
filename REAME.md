@@ -1,1 +1,0 @@
-This project is not yet completly uploaded!
