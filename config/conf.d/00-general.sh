@@ -30,7 +30,7 @@ PROFILE="/usr/portage/profiles/default/linux/amd64/17.0/no-multilib"
 export DEST="/tmp"
 
 # Commands to be included in initramfs
-COMMANDS="busybox mkfs.ext2 mkfs.ext4 mkfs.btrfs btrfs sfdisk mkfs.reiser4"
+COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk mkfs.reiser4"
 
 # List of packages which provide the required commands from above.
 # This is only to help the execution of the gd-build-packages.sh script.
