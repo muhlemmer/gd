@@ -17,7 +17,9 @@
 
 INFO=false
 RESTORE=false
+BACKUP=false
 TEMP="/var/tmp/gd"
+export PKGDIR="$TEMP/packages"
 PROFILE="$(realpath /etc/portage/make.profile)" || exit 1
 
 ETC="/etc/gd"
@@ -33,9 +35,11 @@ while test $# -gt 0; do
 	case "$1" in
 		--info) INFO=true
 			;;
-		--restore) RESTORE=true
+		-p) EMERGE_OPTS="$EMERGE_OPS --pretend"
 			;;
-		-p) p="-p"
+		--backup) BACKUP=true
+			;;
+		--restore) RESTORE=true
 			;;
 		--*) echo "bad option $1" 1>&2; exit 1
 			;;
@@ -47,19 +51,22 @@ done
 
 portdir=$TEMP/etc/portage
 
-# pkglist find packages associated to set $COMMANDS
-pkglist() {
-	set pkgs
+# makeset: generate @build set with packages associated to $COMMANDS
+makeset() {
+	echo "Creating the @build set" 1>&2
+	sf="$portdir/sets/build"
+	echo -n > $sf
 	files="$(gd-list-files.sh $COMMANDS)" || exit $?
 	for file in $files; do
 		echo "Looking for: $file" 1>&2
-		p="=$(equery -q belongs -e $file)" || exit 1
+		p="=$(equery -q belongs -e "$file")" || exit 1
 		echo "Found: $p" 1>&2
 		# Check if package is already included in list
-		echo "$pkgs" | grep -q "$p" && continue
-		pkgs="$pkgs $p"
+		grep -q "$p" "$sf" && continue
+		echo "$p" >> $sf
 	done
-	echo "$pkgs"
+	echo "Generated set in $sf:" 1>&2
+	cat "$sf" || exit 1
 }
 
 # Restore re-emerges packages from the last run, using the system's own profile.
@@ -68,27 +75,30 @@ pkglist() {
 # If there is no set available, restore will attempt to generate a list,
 # based on the current settings.
 restore() {
-	if [ -d $portdir/sets ]; then
-		if ! sets=$(ls $portdir/sets/build-*); then
-			pkgs=pkglist
-		else
-			pkgs=$(cat $(echo "$sets" | tail -1)) || exit $1
-		fi
-	else
-		pkgs=pkglist
-	fi
-	emerge --oneshot --usepkg $p $pkgs || exit 4
-	emerge --depclean --ask $p || exit 4
-	
+	emerge --oneshot --usepkg $EMERGE_OPS $(cat $portdir/sets/build) || exit 4
+	emerge --depclean --ask $EMERGE_OPS || exit 4
 	exit 0
 }
+
+# See if there is any previously safed set.
+if [ -f $portdir/sets/build ]; then
+	read -n1 -p "Previous @build set found. Re-use? (y/n)" reuse 
+	case $reuse in  
+	  y|Y) echo -e "\nRe-using build set" ;; 
+	  n|N) makeset ;; 
+	  *) echo -e "\nInput not understood: $reuse, aborting."; exit 1 ;; 
+	esac
+else
+	mkdir -pv $portdir/sets
+	makeset
+fi
 
 if $RESTORE; then
 	restore
 fi
 
 # See if we need to pull in any packages before continuing
-emerge --update --oneshot $p $PACKAGES || exit 4
+emerge --update --oneshot $EMERGE_OPTS $PACKAGES || exit 4
 
 # Prepare temp location
 mkdir -pv $TEMP/etc || exit 3
@@ -111,30 +121,19 @@ else
 	exit 1
 fi
 
-# Prep the @build set
-set="build-$(date +%s)"
-for pkg in $(pkglist); do
-	echo "$pkg" >> $portdir/sets/$set || exit 3
-done
-	
-echo "Generated set in $portdir/sets/$set:" 1>&2
-cat $portdir/sets/$set || exit 1
-
 if $INFO; then
-	emerge --info
+	emerge --info @build
 	exit $?
 fi
 
-if [[ $p != "-p" ]]; then
-	echo "Create backup of existing packages"
-	(
-		unset PORTAGE_CONFIGROOT
-		quickpkg $(cat $portdir/sets/$set) || exit 4
-	)
+if $BACKUP; then
+	echo "Creating backup of existing packages"
+	quickpkg @build
+	exit $?
 fi
 
 echo "Building packages" 1>&2
-emerge $p @$set
+emerge $EMERGE_OPTS @build
 e=$?
 echo -e "\nTo re-instal the packages to their original state, run $0 --restore"
 exit $e

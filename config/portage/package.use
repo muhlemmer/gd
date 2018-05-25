@@ -1,2 +1,1 @@
-sys-apps/busybox savedconfig mdev static
-sys-fs/e2fsprogs static-libs
+sys-apps/busybox savedconfig mdev
