@@ -15,8 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # This file is an example config. Default settings are mentioned and commented out.
-# The settings given here are used by all gd-*.sh scripts.
+# This file is sourced by all gd-*.sh scripts.
 # However, variables given in this example only apply to gd-build-packages.sh
+
+# Where to store and look for backed up package files.
+# Note that this setting in both native and gd's make.conf will always be ignored,
+# In favor of the script's default ($TEMP/packages) or the setting here.
+# PKGDIR="$TEMP/packages"
 
 # Run emerge --info after setting everything up and exit.
 # Usefull as dry run to check if setting are ok
