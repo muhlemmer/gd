@@ -46,7 +46,7 @@ if [ -d $TARGET ]; then
 			*) echo -e "\nInput not understood: $answ." ;; 
 		esac
 	done
-	rm -rfv $TARGET
+	rm -rfv $TARGET || exit 2
 fi
 
 if ! mkdir -pv $TARGET/{bin,dev,sbin,etc,proc,sys/kernel/debug,usr/{bin,sbin},lib,lib64,mnt/root,root}; then
