@@ -80,6 +80,9 @@ restore() {
 	exit 0
 }
 
+# See if we need to pull in any packages before continuing
+emerge --update --oneshot $EMERGE_OPTS $PACKAGES || exit 4
+
 # See if there is any previously safed set.
 if [ -f $portdir/sets/build ]; then
 	read -n1 -p "Previous @build set found. Re-use? (y/n)" reuse 
@@ -96,9 +99,6 @@ fi
 if $RESTORE; then
 	restore
 fi
-
-# See if we need to pull in any packages before continuing
-emerge --update --oneshot $EMERGE_OPTS $PACKAGES || exit 4
 
 # Prepare temp location
 mkdir -pv $TEMP/etc || exit 3
