@@ -35,13 +35,11 @@ while test $# -gt 0; do
 	case "$1" in
 		--info) INFO=true
 			;;
-		-p) EMERGE_OPTS="$EMERGE_OPS --pretend"
-			;;
 		--backup) BACKUP=true
 			;;
 		--restore) RESTORE=true
 			;;
-		--*) echo "bad option $1" 1>&2; exit 1
+		-*) EMERGE_OPTS="$EMERGE_OPS $1"
 			;;
 		*) echo "argument $1" 1>&2
 			;;
