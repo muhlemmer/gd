@@ -30,7 +30,7 @@ PROFILE="/usr/portage/profiles/default/linux/amd64/17.0/no-multilib"
 export DEST="/tmp"
 
 # Commands to be included in initramfs
-COMMANDS="busybox mkfs.ext4 mkfs.btrfs btrfs sfdisk"
+COMMANDS="busybox mkfs.ext4 mkfs.btrfs btrfs sfdisk mkfs.reiser4"
 
 # List of packages which provide the required commands.
 # This is only to help the execution of the script.
@@ -39,4 +39,4 @@ COMMANDS="busybox mkfs.ext4 mkfs.btrfs btrfs sfdisk"
 # This setting will pull in the packages required before searching.
 # The packages will be subject to an `emerge --update --onshot` on
 # the machine's own /etc/portage.
-PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux"
+PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux sys-fs/reiser4progs"
