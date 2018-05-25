@@ -32,6 +32,10 @@
 # Better use command line option '--backup' once and then run the script normally.
 # BACKUP=false
 
+# Additional arguments to pass to all emerge ivocations,
+# regardless of the make.conf they are using (native or gd's)
+EMERGE_OPTS="--ask"
+
 # In principle, all portage options can be set in /etc/gd/portage/make.conf.
 # Exported variables will override those settings.
 # See `man portage` and `man emerge` for more info.

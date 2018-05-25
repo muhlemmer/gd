@@ -76,7 +76,7 @@ makeset() {
 # based on the current settings.
 restore() {
 	emerge --oneshot --usepkg $EMERGE_OPS $(cat $portdir/sets/build) || exit 4
-	emerge --depclean --ask $EMERGE_OPS || exit 4
+	emerge --depclean $EMERGE_OPS || exit 4
 	exit 0
 }
 
