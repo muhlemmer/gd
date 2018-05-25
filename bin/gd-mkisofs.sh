@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-TEMP="/var/tmp/gd"
-TARGET="$TEMP/isofs"
-
 ETC="/etc/gd"
 if [ -d $ETC/conf.d ]; then
 	for file in $ETC/conf.d/*.sh; do
@@ -27,8 +24,15 @@ else
 	echo "conf.d not found, skipping." 1>&2
 fi
 
-if [[ $TARGET == "/" ]] || [[ $TARGET == "" ]] ; then
-	echo "Dangerous target setting! Aborting."
+if [ -z "$TEMP" ]; then
+	TEMP="/var/tmp/gd"
+fi
+if [ -z "$TARGET" ]; then
+	TARGET="$TEMP/isofs"
+fi
+
+if [ "$TARGET" == "/" ]; then
+	echo "Target set to filesystem root (\"/\")! Are you mad!? Aborting..."
 	exit 1
 fi
 

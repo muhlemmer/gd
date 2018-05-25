@@ -18,8 +18,6 @@
 INFO=false
 RESTORE=false
 BACKUP=false
-TEMP="/var/tmp/gd"
-export PKGDIR="$TEMP/packages"
 PROFILE="$(realpath /etc/portage/make.profile)" || exit 1
 
 ETC="/etc/gd"
@@ -30,6 +28,14 @@ if [ -d $ETC/conf.d ]; then
 else
 	echo "conf.d not found, skipping." 1>&2
 fi
+
+if [ -z "$TEMP" ]; then
+	TEMP="/var/tmp/gd"
+fi
+if [ -z "$PKGDIR" ]; then
+	PKGDIR="$TEMP/packages"
+fi
+export PKGDIR
 
 while test $# -gt 0; do
 	case "$1" in

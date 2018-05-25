@@ -23,20 +23,21 @@
 # TEMP=/var/tmp/gd
 
 # Portage profile to use for build. Has to be an absolute path!
-# Default will determine the current system profile and copy it
+# Default will determine the current system profile and copy it.
 PROFILE="/usr/portage/profiles/default/linux/amd64/17.0/no-multilib"
 
 # Where to copy the resulting .iso image
 export DEST="/tmp"
 
 # Commands to be included in initramfs
-COMMANDS="busybox mkfs.ext4 mkfs.btrfs btrfs sfdisk mkfs.reiser4"
+COMMANDS="busybox mkfs.ext2 mkfs.ext4 mkfs.btrfs btrfs sfdisk mkfs.reiser4"
 
-# List of packages which provide the required commands.
-# This is only to help the execution of the script.
+# List of packages which provide the required commands from above.
+# This is only to help the execution of the gd-build-packages.sh script.
 # As it will try to rebuild packages based on the requested COMMANDS.
-# However, the script will fail if it cannot find a binary
+# However, some scripts will fail if it cannot find a binary.
 # This setting will pull in the packages required before searching.
 # The packages will be subject to an `emerge --update --onshot` on
 # the machine's own /etc/portage.
+# If you are not using the gd-build-packages.sh script, make sure these packages are installed manually!
 PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux sys-fs/reiser4progs"
