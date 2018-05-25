@@ -39,7 +39,7 @@ addFile() {
 	fi
 	FILES="$FILES $file"
 	if [ -L "$file" ]; then
-		addFile $(realpath $file)
+		addFile $(cd "$(dirname "$file")"; realpath -s "$(readlink "$file")")
 	fi
 }
 
