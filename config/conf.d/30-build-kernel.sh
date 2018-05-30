@@ -32,10 +32,10 @@
 # KCONFIG=/etc/gd/kconfig-4.9
 
 # Run "make clean" before and after building
-# CLEAN=true
+# CLEAN=false
 
 # Run "make menuconfig" after constructing .config and before building.
 # MENUCONFIG=true
 
 # Number of paralel jobs for compiling.
-JOBS=8
+# JOBS=8
