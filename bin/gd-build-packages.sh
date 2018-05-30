@@ -45,7 +45,7 @@ while test $# -gt 0; do
 			;;
 		--restore) RESTORE=true
 			;;
-		-*) EMERGE_OPTS="$EMERGE_OPS $1"
+		-*) EMERGE_OPTS="$EMERGE_OPTS $1"
 			;;
 		*) echo "argument $1" 1>&2
 			;;
@@ -84,8 +84,26 @@ restore() {
 	exit 0
 }
 
-# See if we need to pull in any packages before continuing
-emerge --update --oneshot $EMERGE_OPTS $PACKAGES || exit 4
+# Prepare temp location
+mkdir -pv $TEMP/etc || exit 3
+cp -av /etc/gd/portage $TEMP/etc || exit 3
+
+echo "Setting profile $PROFILE" 1>&2
+# Remove any old symlink
+if [ -e $portdir/make.profile ]; then
+	rm -fv $portdir/make.profile || exit 2
+fi
+# Create new symlink
+ln -v -s $PROFILE $portdir/make.profile || exit 3
+
+# Run this in a sub-shell to prevent $USE mangling with the rest of the script.
+(
+	# Set useflags from our make.conf (prevents build failures later on)
+	export USE=$(source $portdir/make.conf || exit;	echo "$USE")
+	# See if we need to pull in any packages before continuing
+	echo $EMERGE_OPTS
+	gd-update-packages.sh $EMERGE_OPTS || exit 4
+) || exit $?
 
 # See if there is any previously safed set.
 if [ -f $portdir/sets/build ]; then
@@ -96,26 +114,13 @@ if [ -f $portdir/sets/build ]; then
 	  *) echo -e "\nInput not understood: $reuse, aborting."; exit 1 ;; 
 	esac
 else
-	mkdir -pv $portdir/sets
+	mkdir -pv $portdir/sets || exit 3
 	makeset
 fi
 
 if $RESTORE; then
 	restore
 fi
-
-# Prepare temp location
-mkdir -pv $TEMP/etc || exit 3
-cp -av /etc/gd/portage $TEMP/etc || exit 3
-mkdir -pv $portdir/sets || exit 3
-
-echo "Setting profile $PROFILE" 1>&2
-# Remove any old symlink
-if [ -e $portdir/make.profile ]; then
-	rm -fv $portdir/make.profile || exit 2
-fi
-# Create new symlink
-ln -v -s $PROFILE $portdir/make.profile || exit 3
 
 # Final check, see if we did the right thing.
 if [ -f $TEMP/etc/portage/make.conf ] && [ -L $TEMP/etc/portage/make.profile ]; then
