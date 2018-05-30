@@ -1,5 +1,7 @@
 #!/bin/sh
-# gd; Short for gentoo-deploy. Create an iso image that deploys gentoo.
+# gd; Create an as small as possible iso image, 
+# containing only the bare minimals to download and extract a stage-3.
+#
 # Copyright (C) 2018  Tim Möhlmann
 #
 # This program is free software: you can redistribute it and/or modify
