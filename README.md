@@ -16,57 +16,17 @@ This scripts depends on:
 * Set of kernel sources (by default in /usr/src/linx, settable)
 * Syslinux, used by the kernel's iso generation script
 
-For instance, this should give you all you need, updated to the latest version:
-```
-emerge -avu app-shells/bash app-portage/gentoolkit sys-kernel/gentoo-sources sys-boot/syslinux
-eselect kernel list
-eselect kernel set <target>
-```
-
 ### Installing
 
-Download the project from github. If you don't want to use git, download the ZIP archive from the project’s [website on GitHub](https://github.com/muhlemmer/gd), and extract it somewhere. 
+Installing is simple. The scripts in the `bin/` directory belong somewhere in `$PATH`. The contents of `config/` should be copied to `/etc/gd`.
 
-```
-mkdir gd
-cd gd
-git clone https://github.com/muhlemmer/gd.git
-```
-The scripts in `bin/` should be copied somewhere in your `$PATH` for example `/usr/local/bin`.
-```
-su -
-cp -av bin/* /usr/local/bin
-```
-The contents of `config/` should be copied to `/etc/gd`.
-```
-mkdir /etc/gd
-cp -av config/* /etc/gd
-```
-
-## Configuration
-
-### /etc/gd/conf.d
-
-First of all, have a look to the (example) configuration files in `/etc/gd/conf.d`. Since some variables are shared between scripts, all the files in `conf.d` are sourced by every script, in ascending order.
-If you define a variable setting in a higher numbered file, it overwrites a previous definition. Variables that are commented out, reflect the default setting in the scripts. The example configuration is broken down in multiple files, to reflect the variables which are used by each script. You could, however, define everything in a single file and override the defaults by naming it `99-myconfig.sh`.
-
-All accepted script variables are mentioned and explained in the config files' comments. Please read those for more information.
-
-### /etc/gd/portage
-
-Here you'll find the portage configuration used by the `gd-build-packages.sh` script. If you intend to use that script (not obligatory), you might want to check `make.conf` to reflect the target machine where you want to run the iso on. The default settings compile to a generic x86-64 target, using static linking where possible and optimized for size. In theory this should run on any x86-64 machine. If you are on a different arch, you definitely want to change things here!
-There are no facilities in this scripts to cross-compile, but it might be hacked in if you are into that kind of thing.
-
-### /etc/gd/include
-
-These files will be included in the initramfs root. `include` reflects the top level of the initramfs' root filesystem. There need to be at least an executable `init` implementation there.
-It is the projects' goal to provide more meaningful scripts here, but that is still a work in progress.
+See [INSTALLING.md](INSTALLING.md) for more details. After installing you might want to read [USAGE.md](USAGE.md) for more documentation.
 
 ## Support
 
 These scripts are quite strait forward and are just a list of steps you would need to do if you'd want to create a boot-able iso image for a generic target, on a gentoo machine, manually. The target audience is experienced users, who can easily modify the scripts in case they don't work. For that reason, it is not the developer's intention to provide any support to persons who wracked their system using any of this scripts.
 
-Please note that executable script documentation is this a work is process, but in the end should cover everything you need to know. If there is anything unclear documentation wise, you can raise an issue and I'll get back to you asap.
+If there is anything unclear in the documentation, please raise an issue and I will get back to you as soon as possible.
 
 ### Issue / bug reporting
 
