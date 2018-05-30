@@ -23,7 +23,7 @@
 # TEMP=/var/tmp/gd
 
 # Commands to be included in initramfs
-COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk mkfs.reiser4"
+COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk"
 
 # List of packages which provide the required commands from above.
 # This is only to help the execution of the gd-build-packages.sh script.
@@ -33,4 +33,4 @@ COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk mkfs.rei
 # The packages will be subject to an `emerge --update --onshot` on
 # the machine's own /etc/portage.
 # If you are not using the gd-build-packages.sh script, make sure these packages are installed manually!
-PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux sys-fs/reiser4progs"
+PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux"
