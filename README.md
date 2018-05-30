@@ -1,8 +1,17 @@
 # GD
 
-gd is short for gentoo-deploy. Create an as small as possible iso image, containing only the bare minimals to download and extract a stage-3. People who want to deploy more instances of gentoo, can do so easily and automated using this tool. Handy for cloud computing, Qemu instances and more. The tools in this project are written completely in shell script, and are easy to hack.
+Create an as small as possible iso image, containing only the bare minimals to download and extract a stage-3. People who want to deploy more instances of gentoo, can do so easily and automated using this tool. The tools in this project are written completely in shell script, and are easy to hack.
 
-Gentoo is a registered trademark from the Gentoo Foundation, Inc. The tools in this repository target the gentoo distribution. However, there is no affiliation between this project and the official Gentoo distribution.
+Possible usecases:
+* A cheap to store installation iso on cloud computing platforms
+* Send the iso by e-mail, because it's really small
+* Use scripts to fully auto-deploy gentoo instances.
+   * Because the image is small, you can easily store dedicated images for server specific configurations, cheap.
+   * Quickly fire up a server, using the customizations from you favorite distro!
+   * It becomes more powerfull if you pull in pre-compiled packages from a server
+* Create a miniature rescue cd, with only the tools the really need.
+
+gd is short for gentoo-deploy. Gentoo is a registered trademark from the Gentoo Foundation, Inc. The tools in this repository target the gentoo distribution. However, there is no affiliation between this project and the official Gentoo distribution.
 
 ## Getting Started
 
