@@ -22,10 +22,6 @@
 # move it to somewhere else!
 # TEMP=/var/tmp/gd
 
-# Portage profile to use for build. Has to be an absolute path!
-# Default will determine the current system profile and copy it.
-PROFILE="/usr/portage/profiles/default/linux/amd64/17.0/no-multilib"
-
 # Commands to be included in initramfs
 COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk mkfs.reiser4"
 

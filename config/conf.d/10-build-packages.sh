@@ -37,6 +37,10 @@
 # Better use command line option '--backup' once and then run the script normally.
 # BACKUP=false
 
+# Portage profile to use for build. Has to be an absolute path!
+# Default will determine the current system profile and copy it.
+# PROFILE="/usr/portage/profiles/default/linux/amd64/17.0/no-multilib"
+
 # Additional arguments to pass to all emerge ivocations,
 # regardless of the make.conf they are using (native or gd's)
 EMERGE_OPTS="--ask"
