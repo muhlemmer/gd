@@ -96,13 +96,15 @@ fi
 # Create new symlink
 ln -v -s $PROFILE $portdir/make.profile || exit 3
 
-# Run this in a sub-shell to prevent $USE mangling with the rest of the script.
-(
-	# Set useflags from our make.conf (prevents build failures later on)
-	export USE=$(source $portdir/make.conf || exit;	echo "$USE")
-	# See if we need to pull in any packages before continuing
-	gd-update-packages.sh $EMERGE_OPTS || exit 4
-) || exit $?
+if ! $RESTORE; then
+	# Run this in a sub-shell to prevent $USE mangling with the rest of the script.
+	(
+		# Set useflags from our make.conf (prevents build failures later on)
+		export USE=$(source $portdir/make.conf || exit;	echo "$USE")
+		# See if we need to pull in any packages before continuing
+		gd-update-packages.sh $EMERGE_OPTS || exit 4
+	) || exit $?
+fi
 
 # See if there is any previously safed set.
 if [ -f $portdir/sets/build ]; then
