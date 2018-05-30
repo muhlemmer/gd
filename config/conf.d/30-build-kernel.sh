@@ -42,7 +42,7 @@ EOF
 # CLEAN=false
 
 # Run "make menuconfig" after constructing .config and before building.
-# MENUCONFIG=true
+# MENUCONFIG=false
 
 # Number of paralel jobs for compiling.
 # JOBS=8
