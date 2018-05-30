@@ -79,8 +79,8 @@ makeset() {
 # If there is no set available, restore will attempt to generate a list,
 # based on the current settings.
 restore() {
-	emerge --oneshot --usepkg $EMERGE_OPS $(cat $portdir/sets/build) || exit 4
-	emerge --depclean $EMERGE_OPS || exit 4
+	emerge --oneshot --usepkg --binpkg-respect-use=n $EMERGE_OPS $(cat $portdir/sets/build) || exit 4
+	echo "You might want to run \"emerge --newuse --deep @world\" to clean out any remaining useflags from this script"
 	exit 0
 }
 
@@ -101,7 +101,6 @@ ln -v -s $PROFILE $portdir/make.profile || exit 3
 	# Set useflags from our make.conf (prevents build failures later on)
 	export USE=$(source $portdir/make.conf || exit;	echo "$USE")
 	# See if we need to pull in any packages before continuing
-	echo $EMERGE_OPTS
 	gd-update-packages.sh $EMERGE_OPTS || exit 4
 ) || exit $?
 
