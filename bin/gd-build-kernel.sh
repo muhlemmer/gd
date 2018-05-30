@@ -49,6 +49,9 @@ restore_cfg() {
 	if [ -f gd-kconfig.patch ]; then
 		rm -v gd-kconfig.patch
 	fi
+	if [ -f gd-extra.patch ]; then
+		rm -v gd-extra.patch
+	fi
 	if [ -f kconfig.bak ]; then
 		echo "Restoring kernel config backup"
 		if ! cp -v kconfig.bak .config; then
@@ -56,6 +59,7 @@ restore_cfg() {
 			exit 3
 		fi
 	fi
+	rm -v kconfig.bak
 	if $CLEAN; then
 		echo "Running \"make clean\""
 		make clean || restore_cfg 2
