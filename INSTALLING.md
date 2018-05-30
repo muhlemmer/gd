@@ -33,7 +33,7 @@ cp -av config/* /etc/gd
 
 ## Alternative: set $PATH
 
-Alternativly, you could skipp to copy the scripts from `bin/` and just set your `$PATH` environment variable to the package `bin/` directory,
+Alternativly, you could skip to copy the scripts from `bin/` and just set your `$PATH` environment variable to the package `bin/` directory,
 ```
 export PATH=$PATH:/path/to/gd/bin
 ```
