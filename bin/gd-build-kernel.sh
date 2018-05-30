@@ -68,8 +68,13 @@ restore_cfg() {
 }
 
 if [ ! -x $TARGET/init ]; then
-	echo "$TARGET doesn't contain a valid iso filesystem. It needs at least an executable /init!"
+	echo "$TARGET doesn't contain a valid iso filesystem. It needs at least an executable /init! Aborting..."
 	echo "Did you run gd-mkisofs.sh, before this script?"
+	exit 1
+fi
+
+if [ -L $TARGET/init ] && [ ! -x $TARGET/etc/init.d/rcS ]; then
+	echo "Busybox init is used, but there is no executable script at $TARGET/etc/init.d/rcS! Aborting..."
 	exit 1
 fi
 
@@ -86,7 +91,6 @@ if [ -n "$KCONFIG" ]; then
 		echo "$KCONFIG not found! Aborting..."
 		exit 1
 	fi
-	echo "Using $KCONFIG as base config file."
 	mergefiles="$KCONFIG"
 else
 	make defconfig
@@ -99,7 +103,6 @@ CONFIG_BLK_DEV_INITRD=y
 # Target as used by gd-mkisofs.sh
 CONFIG_INITRAMFS_SOURCE="$TARGET"
 CONFIG_DEFAULT_HOSTNAME="gd"
-CONFIG_CMDLINE="init=\"/bin/busybox init\""
 EOF
 
 mergefiles="$mergefiles gd-kconfig.patch"

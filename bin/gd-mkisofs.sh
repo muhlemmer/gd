@@ -69,12 +69,21 @@ echo "Copying files..."
 cp --parents -av $files "$TARGET"
 
 # Copy include folder
-if ! cp -av $ETC/include/* $TARGET; then
-	echo "Copying include dir contents failed"
-	exit 1
+if [ -d $ETC/include ] && [ -n "$(ls -A $ETC/include)" ]; then
+	if ! cp -av $ETC/include/* $TARGET; then
+		echo "Copying include dir contents failed"
+		exit 1
+	fi
 fi
 
-if ! chmod -v +x $TARGET/init; then
-	echo "Failed to set +x on $TARGET/init"
-	exit 1
+if [ -f $TARGET/init ]; then
+	if ! chmod -v +x $TARGET/init; then
+		echo "Failed to set +x on $TARGET/init"
+		exit 3
+	fi
+else
+	if ! ln -sv bin/busybox $TARGET/init; then
+		echo "Failed to create init symlink in $TARGET"
+		exit 3
+	fi
 fi
