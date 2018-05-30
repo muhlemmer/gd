@@ -86,28 +86,30 @@ if [ -n "$KCONFIG" ]; then
 		echo "$KCONFIG not found! Aborting..."
 		exit 1
 	fi
-	echo "Copying $KCONFIG to $KDIR/.config"
-	cp -v $KCONFIG .config || exit 3
-	echo "Running \"make silentoldconfig\""
-	make silentoldconfig || restore_cfg 3
+	echo "Using $KCONFIG as base config file."
+	mergefiles="$KCONFIG"
 else
 	make defconfig
+	echo "Using .config as base config file."
+	mergefiles=".config"
 fi
 
 cat <<EOF > gd-kconfig.patch
 CONFIG_BLK_DEV_INITRD=y
 # Target as used by gd-mkisofs.sh
 CONFIG_INITRAMFS_SOURCE="$TARGET"
+CONFIG_DEFAULT_HOSTNAME="gd"
+CONFIG_CMDLINE="init=\"/bin/busybox init\""
 EOF
 
-mf=".config gd-kconfig.patch"
+mergefiles="$mergefiles gd-kconfig.patch"
 
 if [ -n "$MERGE_EXTRA" ]; then
 	echo "$MERGE_EXTRA" > gd-extra.patch
-	mf="$mf gd-extra.patch"
+	mergefiles="$mergefiles gd-extra.patch"
 fi
 
-scripts/kconfig/merge_config.sh $mf || restore_cfg 4
+scripts/kconfig/merge_config.sh -n $mergefiles || restore_cfg 4
 
 if $CLEAN; then
 	echo "Running \"make clean\""
