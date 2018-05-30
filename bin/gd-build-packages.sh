@@ -47,7 +47,7 @@ while test $# -gt 0; do
 			;;
 		-*) EMERGE_OPTS="$EMERGE_OPTS $1"
 			;;
-		*) echo "argument $1" 1>&2
+		*) echo "argument $1 incorrect" 1>&2; exit 1
 			;;
 	esac
 	shift
