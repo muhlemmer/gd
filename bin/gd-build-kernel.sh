@@ -96,7 +96,14 @@ CONFIG_BLK_DEV_INITRD=y
 CONFIG_INITRAMFS_SOURCE="$TARGET"
 EOF
 
-scripts/kconfig/merge_config.sh .config gd-kconfig.patch || restore_cfg 4
+mf=".config gd-kconfig.patch"
+
+if [ -n "$MERGE_EXTRA" ]; then
+	echo "$MERGE_EXTRA" > gd-extra.patch
+	mf="$mf gd-extra.patch"
+fi
+
+scripts/kconfig/merge_config.sh $mf || restore_cfg 4
 
 if $CLEAN; then
 	echo "Running \"make clean\""

@@ -31,6 +31,13 @@
 # Use this saved kernel config. Default is to generate a new one.
 # KCONFIG=/etc/gd/kconfig-4.9
 
+# Additional kernel config parameters to merge.
+MERGE_EXTRA=$(cat <<EOF
+CONFIG_BTRFS_FS=y
+CONFIG_BTRFS_FS_POSIX_ACL=y
+EOF
+)
+
 # Run "make clean" before and after building
 # CLEAN=false
 
