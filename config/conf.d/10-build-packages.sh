@@ -52,5 +52,5 @@ EMERGE_OPTS="--ask"
 # Where the backed-up system packages are put and restored from.
 # export PKGDIR="$TEMP/packages"
 
-# Makeopts overide;
-export MAKEOPTS="-j8"
+# Example makeopts overide;
+# export MAKEOPTS="-j8"
