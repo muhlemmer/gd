@@ -36,10 +36,3 @@ if [ -n "$(ls [[:digit:]][[:digit:]]*.sh)" ]; then
 		./$script 2>&1 | log_pipe || die
 	done
 fi
-
-
-
-
-#mount -t proc none /proc
-#mount -t sysfs none /sys
-#mdev -s
