@@ -28,6 +28,9 @@
 # Where to look for kernel sources. Ussualy the /usr/src/symlink
 # KDIR="/usr/src/linux"
 
+# If a .config is found, back it up and restore at the end of the script.
+# KCONFIG_BACKUP=true
+
 # Use this saved kernel config. Default is to generate a new one.
 # KCONFIG=/etc/gd/kconfig-4.9
 

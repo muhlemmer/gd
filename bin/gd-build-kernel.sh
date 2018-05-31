@@ -19,6 +19,7 @@
 
 ETC="/etc/gd"
 KDIR="/usr/src/linux"
+KCONFIG_BACKUP=true
 CLEAN=true
 MENUCONFIG=false
 JOBS=1
@@ -52,14 +53,14 @@ restore_cfg() {
 	if [ -f gd-extra.patch ]; then
 		rm -v gd-extra.patch
 	fi
-	if [ -f kconfig.bak ]; then
+	if [ -f kconfig.bak ] && $KCONFIG_BACKUP; then
 		echo "Restoring kernel config backup"
 		if ! cp -v kconfig.bak .config; then
 			echo "Restoring backup failed!"
 			exit 3
 		fi
+		rm -v kconfig.bak
 	fi
-	rm -v kconfig.bak
 	if $CLEAN; then
 		echo "Running \"make clean\""
 		make clean || restore_cfg 2
@@ -80,11 +81,15 @@ fi
 
 echo "cd $KDIR"
 cd $KDIR
-# Backup any existing config
-if [ -f .config ]; then
-	echo "$KDIR/.config exists, creating backup."
-	cp -v .config kconfig.bak || exit 3
+
+if $KCONFIG_BACKUP; then
+	# Backup any existing config
+	if [ -f .config ]; then
+		echo "$KDIR/.config exists, creating backup."
+		cp -v .config kconfig.bak || exit 3
+	fi
 fi
+
 # If $KCONFIG is set, use that file
 if [ -n "$KCONFIG" ]; then
 	if [ ! -f "$KCONFIG" ]; then
