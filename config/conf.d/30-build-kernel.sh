@@ -32,7 +32,8 @@
 # KCONFIG_BACKUP=true
 
 # Use this saved kernel config. Default is to generate a new one.
-# KCONFIG=/etc/gd/kconfig-4.9
+# Uncomment below if you wan tot use the example config.
+# KCONFIG=/etc/gd/kconfig-4.9-kvm
 
 # Additional kernel config parameters to merge.
 MERGE_EXTRA=$(cat <<EOF
