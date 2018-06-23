@@ -1,9 +1,39 @@
 #!/bin/busybox sh
 
-mount -t proc none /proc
-mount -t sysfs none /sys
+# Log writes the script's output to a log file and prints it on console.
+log() {	
+	echo -e "$*" | tee -a /var/log/boot.log
+}
 
-/bin/busybox --install /bin
-mdev -s
+# Log pipe allows piping of output to log()
+log_pipe() {
+	#Read from STDIN
+	while read line; do
+		log "$line"
+	done
+}
 
-echo -e "\nBoot took $(cut -d' ' -f1 /proc/uptime) seconds\n"
+die() {
+	log "!!! Something went wrong, executing busybox shell..."
+	exec /bin/busybox sh
+}
+
+set -o pipefail
+# Location where to log this script's output
+mkdir -pv /var/log 2>&1 || die
+echo -n "" > /var/log/boot.log # For test environment, wipe the file if it exists.
+
+log ">>> Installing busybox"
+# Make sure /bin and /sbin exists
+mkdir -pv /bin /sbin 2>&1 | log_pipe || die
+/bin/busybox --install -s 2>&1 | log_pipe || die
+
+cd /etc/init.d
+if [ -n "$(ls [[:digit:]][[:digit:]]*.sh)" ]; then
+	log ">>> Running init scripts"
+	for script in [[:digit:]][[:digit:]]*.sh; do
+		log ">>> Executing $(realpath $script)"
+		./$script 2>&1 | log_pipe || die
+		log ">>> Successfully started $(realpath $script)"
+	done
+fi
