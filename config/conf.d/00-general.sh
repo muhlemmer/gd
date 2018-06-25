@@ -26,7 +26,7 @@
 # TEMP=/var/tmp/gd
 
 # Commands to be included in initramfs
-COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk"
+COMMANDS="busybox" #mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk"
 
 # List of packages which provide the required commands from above.
 # This is only to help the execution of the gd-build-packages.sh script.

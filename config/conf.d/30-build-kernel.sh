@@ -43,7 +43,7 @@ EOF
 )
 
 # Run "make clean" before and after building
-# CLEAN=false
+CLEAN=false
 
 # Run "make menuconfig" after constructing .config and before building.
 # MENUCONFIG=false
