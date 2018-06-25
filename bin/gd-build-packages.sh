@@ -30,6 +30,8 @@ if [ -z "$TARGET" ]; then
 	TARGET="x86_64-nomultilib-linux-uclibc"
 fi
 
+# Any command line args that start with "-" are passed to emerge.
+# Plain arguments (without "-") are invalid
 while test $# -gt 0; do
 	case "$1" in
 		-*) EMERGE_OPTS="$EMERGE_OPTS $1"
