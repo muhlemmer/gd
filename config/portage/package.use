@@ -1,1 +1,2 @@
-sys-apps/busybox savedconfig mdev
+# static has to be ommitted for dns lookup to work
+sys-apps/busybox -make-symlinks static ipv6 mdev
