@@ -26,12 +26,21 @@ else
 	echo "conf.d not found, skipping." 1>&2
 fi
 
+if [ -z "$TARGET" ]; then
+	TARGET="x86_64-nomultilib-linux-uclibc"
+fi
+
 if [ -z "$ISOFS" ]; then
 	ISOFS="/usr/src/isofs"
 fi
 
 if [ "$ISOFS" == "/" ]; then
 	echo "ISOFS set to filesystem root (\"/\")! Are you mad!? Aborting..."
+	exit 1
+fi
+
+if [ ! -d /usr/$TARGET ]; then
+	echo "/usr/$TARGET does not exist! Please run gd-build-packages.sh first"
 	exit 1
 fi
 
@@ -58,12 +67,18 @@ if ! cp -av /dev/{null,console,tty} $ISOFS/dev; then
 	exit 1
 fi
 
-files="$(gd-list-files.sh $COMMANDS)" || exit $?
+lf=$(which gd-list-files.sh || exit $?)
+cp -av $lf /usr/$TARGET || exit 3
+
+files="$(chroot /usr/$TARGET /gd-list-files.sh $COMMANDS)" || exit $?
 
 # Copies all the files to ISOFS
 # Creates directories if required
 echo "Copying files..."
-cp --parents -av $files "$ISOFS"
+cd /usr/$TARGET
+for file in $files; do
+	cp -av --parents ${file:1} $ISOFS
+done
 
 # Copy include folder
 if [ -d $ETC/include ] && [ -n "$(ls -A $ETC/include)" ]; then
