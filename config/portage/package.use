@@ -1,2 +1,2 @@
-# static has to be ommitted for dns lookup to work
 sys-apps/busybox -make-symlinks mdev
+sys-fs/btrfs-progs -static
