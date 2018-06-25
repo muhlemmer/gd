@@ -62,5 +62,5 @@ fi
 cp -av /etc/gd/portage $TARGET/etc || exit 3
 
 echo "Building packages" 1>&2
-$TARGET-emerge $EMERGE_OPTS $PACKAGES
+$TARGET-emerge $EMERGE_OPTS $PACKAGES sys-apps/file
 exit $?
