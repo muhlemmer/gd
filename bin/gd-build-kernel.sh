@@ -31,12 +31,8 @@ else
 	echo "conf.d not found, skipping." 1>&2
 fi
 
-if [ -z "$TEMP" ]; then
-	TEMP="/var/tmp/gd"
-fi
-
 if [ -z "$DEST" ]; then
-	DEST="$TEMP"
+	DEST="/var/tmp/gd"
 fi
 
 if [ -z "$TARGET" ]; then
@@ -45,7 +41,7 @@ fi
 export CROSS_COMPILE=$TARGET-
 
 if [ -z "$ISOFS" ]; then
-	ISOFS="$TEMP/isofs"
+	ISOFS="/usr/src/isofs"
 fi
 
 if [ ! -f $KDIR/scripts/kconfig/merge_config.sh ]; then
@@ -124,7 +120,7 @@ if [ -n "$MERGE_EXTRA" ]; then
 	mergefiles="$mergefiles gd-extra.patch"
 fi
 
-scripts/kconfig/merge_config.sh $mergefiles || restore_cfg 4
+scripts/kconfig/merge_config.sh -n $mergefiles || restore_cfg 4
 
 if $CLEAN; then
 	echo "Running \"make clean\""
@@ -140,6 +136,11 @@ if ! make -j$JOBS isoimage; then
 	echo "!!! Build of kernel image failed..."
 	restore_cfg 4
 fi
+
+if [ ! -d $DEST ]; then
+	mkdir -pv $DEST || restore_cfg 3
+fi
+
 cp -av arch/x86/boot/image.iso $DEST || restore_cfg 3
 
 restore_cfg 0
