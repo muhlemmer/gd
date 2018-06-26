@@ -29,9 +29,9 @@ mkdir -pv /bin /sbin 2>&1 | log_pipe || die
 /bin/busybox --install -s 2>&1 | log_pipe || die
 
 cd /etc/init.d
-if [ -n "$(ls [[:digit:]][[:digit:]]*.sh)" ]; then
+if [ -n "$(ls *.sh)" ]; then
 	log ">>> Running init scripts"
-	for script in [[:digit:]][[:digit:]]*.sh; do
+	for script in *.sh; do
 		log ">>> Executing $(realpath $script)"
 		./$script 2>&1 | log_pipe || die
 		log ">>> Successfully started $(realpath $script)"
