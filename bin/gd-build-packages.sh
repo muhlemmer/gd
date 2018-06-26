@@ -43,7 +43,7 @@ while test $# -gt 0; do
 done
 
 cd=true
-if [ -d $TARGET ]; then
+if [ -d /usr/$TARGET ]; then
 	while true; do
 		read -p "/usr/$TARGET already exists. Re-run 'crossdev'? [y/n] " answ
 		case $answ in
@@ -59,7 +59,7 @@ if $cd; then
 	crossdev --stable -t $TARGET || exit 3
 fi
 # Copy over our own make.conf
-cp -av /etc/gd/portage $TARGET/etc || exit 3
+cp -av /etc/gd/portage /usr/$TARGET/etc || exit 3
 
 echo "Building packages" 1>&2
 $TARGET-emerge $EMERGE_OPTS app-shells/bash sys-apps/file sys-apps/which $PACKAGES
