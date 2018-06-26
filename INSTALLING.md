@@ -6,7 +6,7 @@ This document outlines a instalation example for **gd**.
 
 On a gentoo system, the following commands should pull in this program's dependecies:
 ```
-emerge -avu app-shells/bash app-portage/gentoolkit sys-kernel/gentoo-sources sys-boot/syslinux
+emerge -avu app-shells/bash sys-kernel/gentoo-sources sys-boot/syslinux
 eselect kernel list
 eselect kernel set <target>
 ```
