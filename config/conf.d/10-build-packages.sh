@@ -29,4 +29,4 @@
 # export MAKEOPTS="-j8"
 
 # List of required packages to emerge in crossdev target.
-PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux"
+PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux dev-util/strace"
