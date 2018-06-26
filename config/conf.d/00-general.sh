@@ -18,14 +18,46 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # This file is an example config. Default settings are mentioned and commented out.
-# The settings given here are used by all gd-*.sh scripts.
+# The settings given here are sourced by all gd-*.sh scripts.
+#
+# All portage options can be set in /etc/gd/portage/make.conf.
+# Exported variables here will override those settings.
+# See `man portage` and `man emerge` for more info.
 
-# Where the scripts will store work info. The default resides in /var/tmp and most
-# probably gets erased upon reboot. If you want to keep the info (like modified package set)
-# move it to somewhere else!
-# TEMP=/var/tmp/gd
+# Crossdev build target
+TARGET="x86_64-nomultilib-linux-uclibc"
+
+# Number of paralel jobs for compiling.
+JOBS=8
+
+# List of required packages to emerge in crossdev target.
+PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux dev-util/strace"
 
 # Commands to be included in initramfs
 COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk strace"
 
-TARGET="x86_64-nomultilib-linux-uclibc"
+# Destination where the resulting .iso image will be copied
+# DEST=/var/tmp/gd
+
+# Where to look for kernel sources. Ussualy the /usr/src/symlink
+# KDIR="/usr/src/linux"
+
+# If a .config is found, back it up and restore at the end of the script.
+# KCONFIG_BACKUP=true
+
+# Use this saved kernel config. Default is to generate a new one.
+# Uncomment below if you wan tot use the example config.
+KCONFIG=/etc/gd/kconfig-4.9-kvm
+
+# Additional kernel config parameters to merge.
+MERGE_EXTRA=$(cat <<EOF
+CONFIG_BTRFS_FS=y
+CONFIG_BTRFS_FS_POSIX_ACL=y
+EOF
+)
+
+# Run "make clean" before and after building
+CLEAN=false
+
+# Run "make menuconfig" after constructing .config and before building.
+# MENUCONFIG=false
