@@ -6,8 +6,8 @@ Possible usecases:
 * A cheap to store installation iso on cloud computing platforms
 * Send the iso by e-mail, because it's really small
 * Use scripts to fully auto-deploy gentoo instances.
-   * Because the image is small, you can easily store dedicated images for server specific configurations, cheap.
-   * Quickly fire up a server, using the customizations from you favorite distro!
+   * Because the image is small, you can easily store dedicated images for server specific configurations, cheaply.
+   * Quickly fire up a server, using the customizations from your favorite distro, Gentoo!
    * It becomes more powerfull if you pull in pre-compiled packages from a server
 * Create a miniature rescue cd, with only the tools the really need.
 
@@ -15,13 +15,12 @@ gd is short for gentoo-deploy. Gentoo is a registered trademark from the Gentoo 
 
 ## Getting Started
 
-Before you get started with this scripts, please know that this tools are for expert users only! The scrips can mess with you system in ways unimaginable! The resulting iso system, by default, is just a BusyBox shell with a few tools. This means it is more bear-bones than the gentoo minimal-install cd, and not backup up at all by the gentoo handbook! Do not expect to get any kind of help from the community if you wrecked your system with this scripts!
+Before you get started with this scripts, please know that this tools are for expert users only! The scrips can mess with you system in ways unimaginable! The resulting iso system, by default, is just a BusyBox shell with a few tools. This means it is more bear-bones than the gentoo minimal-install cd, and not backed up at all by the gentoo handbook! Do not expect to get any kind of help from the community if you wrecked your system with this scripts!
 
 ### Prerequisites
 
 This scripts depends on:
 * Working shell (bash, sh, ash, busybox)
-* Gentoolkit, for equery.
 * Set of kernel sources (by default in /usr/src/linx, settable)
 * Syslinux, used by the kernel's iso generation script
 
@@ -39,18 +38,14 @@ If there is anything unclear in the documentation, please raise an issue and I w
 
 ### Issue / bug reporting
 
-Please don't raise issues requesting all kinds of functionality, you are free to contribute instead.
-Any package build failures are usually just the result of a mismatch between the system's native profile and the one `gd-build-packages.sh` attempts to compile to.
-You need to examine and play around with package useflags and portage configuration to get it going the right way.
-
-If, however you find a miss-behaviour of the scripts itself, please raise an issue explaining:
+Please don't raise issues requesting all kinds of functionality, you are free to contribute instead. If, however you find a miss-behaviour of the scripts itself, please raise an issue explaining:
  1. Which of the scripts
  2. What did you expect to happen?
  3. What happened?
 
 ## Contributing
 
-Please send a pull request for any improvements made. For any changes towards the portage config, please explain carefully how such a setting would serve the world and not just your setup.
+Pull requests are welcome!
 
 ## License
 
