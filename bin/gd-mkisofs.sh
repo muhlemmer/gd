@@ -26,64 +26,76 @@ else
 	echo "conf.d not found, skipping." 1>&2
 fi
 
-if [ -z "$TEMP" ]; then
-	TEMP="/var/tmp/gd"
-fi
 if [ -z "$TARGET" ]; then
-	TARGET="$TEMP/isofs"
+	TARGET="x86_64-nomultilib-linux-uclibc"
 fi
 
-if [ "$TARGET" == "/" ]; then
-	echo "Target set to filesystem root (\"/\")! Are you mad!? Aborting..."
+if [ -z "$ISOFS" ]; then
+	ISOFS="/usr/src/isofs"
+fi
+
+if [ "$ISOFS" == "/" ]; then
+	echo "ISOFS set to filesystem root (\"/\")! Are you mad!? Aborting..."
 	exit 1
 fi
 
-if [ -d $TARGET ]; then
-	echo "$TARGET already exists!"
+if [ ! -d /usr/$TARGET ]; then
+	echo "/usr/$TARGET does not exist! Please run gd-build-packages.sh first"
+	exit 1
+fi
+
+if [ -d $ISOFS ]; then
+	echo "$ISOFS already exists!"
 	while true; do
-		read -p "This script will delete and overwrite ALL files in $TARGET! Do you want to continue? (yes)" answ
+		read -p "This script will delete and overwrite ALL files in $ISOFS! Do you want to continue? (yes)" answ
 		case $answ in  
 			yes|Yes|YES) break ;; 
 			no|No|NO) echo "Aborting..."; exit 3 ;; 
 			*) echo -e "\nInput not understood: $answ." ;; 
 		esac
 	done
-	rm -rfv $TARGET || exit 2
+	rm -rfv $ISOFS || exit 2
 fi
 
-if ! mkdir -pv $TARGET/{bin,dev,sbin,etc,proc,sys/kernel/debug,usr/{bin,sbin},lib,lib64,mnt/root,root}; then
+if ! mkdir -pv $ISOFS/{bin,dev,sbin,etc,proc,sys/kernel/debug,usr/{bin,sbin},lib,lib64,mnt/root,root}; then
 	echo "Creating directory structure failed!"
 	exit 1
 fi
 
-if ! cp -av /dev/{null,console,tty} $TARGET/dev; then
+if ! cp -av /dev/{null,console,tty} $ISOFS/dev; then
 	echo "Copying /dev nodes failed!"
 	exit 1
 fi
 
-files="$(gd-list-files.sh $COMMANDS)" || exit $?
+lf=$(which gd-list-files.sh || exit $?)
+cp -av $lf /usr/$TARGET || exit 3
 
-# Copies all the files to TARGET
+files="$(chroot /usr/$TARGET /gd-list-files.sh $COMMANDS)" || exit $?
+
+# Copies all the files to ISOFS
 # Creates directories if required
 echo "Copying files..."
-cp --parents -av $files "$TARGET"
+cd /usr/$TARGET
+for file in $files; do
+	cp -av --parents ${file:1} $ISOFS
+done
 
 # Copy include folder
 if [ -d $ETC/include ] && [ -n "$(ls -A $ETC/include)" ]; then
-	if ! cp -av $ETC/include/* $TARGET; then
+	if ! cp -av $ETC/include/* $ISOFS; then
 		echo "Copying include dir contents failed"
 		exit 1
 	fi
 fi
 
-if [ -f $TARGET/init ]; then
-	if ! chmod -v +x $TARGET/init; then
-		echo "Failed to set +x on $TARGET/init"
+if [ -f $ISOFS/init ]; then
+	if ! chmod -v +x $ISOFS/init; then
+		echo "Failed to set +x on $ISOFS/init"
 		exit 3
 	fi
 else
-	if ! ln -sv bin/busybox $TARGET/init; then
-		echo "Failed to create init symlink in $TARGET"
+	if ! ln -sv bin/busybox $ISOFS/init; then
+		echo "Failed to create init symlink in $ISOFS"
 		exit 3
 	fi
 fi

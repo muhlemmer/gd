@@ -1,1 +1,2 @@
-sys-apps/busybox savedconfig mdev
+sys-apps/busybox -make-symlinks mdev
+sys-fs/btrfs-progs -static

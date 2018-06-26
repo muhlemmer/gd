@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # gd; Create an as small as possible iso image, 
 # containing only the bare minimals to download and extract a stage-3.
 #
@@ -24,8 +24,13 @@ fi
 
 COMMANDS=$@
 
-# Just making sure sbin's are included in path for which.
-export PATH=$PATH:/sbin:/usr/sbin
+# This script is run from a chroot. Making sure $PATH is set correctly
+export PATH=/bin:/usr/bin:/sbin:/usr/sbin
+
+# uclibc does not provide ldd script, so we define it here.
+ldd () {
+	LD_TRACE_LOADED_OBJECTS=1 $1
+}
 
 set FILES
 # addFile adds a file to the FILES list. If file is a symlink,
@@ -41,7 +46,7 @@ addFile() {
 	fi
 	FILES="$FILES $file"
 	if [ -L "$file" ]; then
-		addFile $(cd "$(dirname "$file")"; realpath -s "$(readlink "$file")")
+		addFile "$(realpath $file)"
 	fi
 }
 
@@ -57,7 +62,9 @@ addLibs() {
 for cmd in $COMMANDS; do
 	bin=$(which $cmd) || exit 1
 	addFile $bin
-	addLibs $bin
+	if [[ "$(file $bin)" = *"dynamically"* ]]; then
+		addLibs $bin
+	fi
 done
 echo $FILES
 exit 0

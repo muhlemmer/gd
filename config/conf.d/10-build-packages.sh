@@ -21,39 +21,12 @@
 # This file is sourced by all gd-*.sh scripts.
 # However, variables given in this example only apply to gd-build-packages.sh
 
-# Where to store and look for backed up package files.
-# Note that this setting in both native and gd's make.conf will always be ignored,
-# In favor of the script's default ($TEMP/packages) or the setting here.
-# PKGDIR="$TEMP/packages"
-
-# Run emerge --info after setting everything up and exit.
-# Usefull as dry run to check if setting are ok
-# This mode can also be invoked by using the '--info' command line option
-# INFO=false
-
-# Run a restore, session. Restore rebuilds packages to the original state,
-# using the sytem's own profile and make.conf.
-# If there are any backed up packages present, those will be used.
-# RESTORE=false
-
-# Create a backup using 'quickpkg' and exit.
-# Better use command line option '--backup' once and then run the script normally.
-# BACKUP=false
-
-# Portage profile to use for build. Has to be an absolute path!
-# Default will determine the current system profile and copy it.
-# PROFILE="/usr/portage/profiles/default/linux/amd64/17.0/no-multilib"
-
-# Additional arguments to pass to all emerge ivocations,
-# regardless of the make.conf they are using (native or gd's)
-EMERGE_OPTS="--ask"
-
 # In principle, all portage options can be set in /etc/gd/portage/make.conf.
 # Exported variables will override those settings.
 # See `man portage` and `man emerge` for more info.
 
-# Where the backed-up system packages are put and restored from.
-# export PKGDIR="$TEMP/packages"
-
 # Example makeopts overide;
 # export MAKEOPTS="-j8"
+
+# List of required packages to emerge in crossdev target.
+PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux dev-util/strace"

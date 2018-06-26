@@ -33,7 +33,7 @@
 
 # Use this saved kernel config. Default is to generate a new one.
 # Uncomment below if you wan tot use the example config.
-# KCONFIG=/etc/gd/kconfig-4.9-kvm
+KCONFIG=/etc/gd/kconfig-4.9-kvm
 
 # Additional kernel config parameters to merge.
 MERGE_EXTRA=$(cat <<EOF
@@ -43,10 +43,10 @@ EOF
 )
 
 # Run "make clean" before and after building
-# CLEAN=false
+CLEAN=false
 
 # Run "make menuconfig" after constructing .config and before building.
 # MENUCONFIG=false
 
 # Number of paralel jobs for compiling.
-# JOBS=8
+JOBS=8

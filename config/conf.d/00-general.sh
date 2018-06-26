@@ -26,14 +26,6 @@
 # TEMP=/var/tmp/gd
 
 # Commands to be included in initramfs
-COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk"
+COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk strace"
 
-# List of packages which provide the required commands from above.
-# This is only to help the execution of the gd-build-packages.sh script.
-# As it will try to rebuild packages based on the requested COMMANDS.
-# However, some scripts will fail if it cannot find a binary.
-# This setting will pull in the packages required before searching.
-# The packages will be subject to an `emerge --update --onshot` on
-# the machine's own /etc/portage.
-# If you are not using the gd-build-packages.sh script, make sure these packages are installed manually!
-PACKAGES="sys-apps/busybox sys-fs/btrfs-progs sys-fs/e2fsprogs sys-apps/util-linux"
+TARGET="x86_64-nomultilib-linux-uclibc"

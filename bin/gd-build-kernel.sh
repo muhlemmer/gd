@@ -31,14 +31,17 @@ else
 	echo "conf.d not found, skipping." 1>&2
 fi
 
-if [ -z "$TEMP" ]; then
-	TEMP="/var/tmp/gd"
-fi
 if [ -z "$DEST" ]; then
-	DEST="$TEMP"
+	DEST="/var/tmp/gd"
 fi
+
 if [ -z "$TARGET" ]; then
-	TARGET="$TEMP/isofs"
+	TARGET="x86_64-nomultilib-linux-uclibc"
+fi
+export CROSS_COMPILE=$TARGET-
+
+if [ -z "$ISOFS" ]; then
+	ISOFS="/usr/src/isofs"
 fi
 
 if [ ! -f $KDIR/scripts/kconfig/merge_config.sh ]; then
@@ -68,14 +71,14 @@ restore_cfg() {
 	exit $1
 }
 
-if [ ! -x $TARGET/init ]; then
-	echo "$TARGET doesn't contain a valid iso filesystem. It needs at least an executable /init! Aborting..."
+if [ ! -x $ISOFS/init ]; then
+	echo "$ISOFS doesn't contain a valid iso filesystem. It needs at least an executable /init! Aborting..."
 	echo "Did you run gd-mkisofs.sh, before this script?"
 	exit 1
 fi
 
-if [ -L $TARGET/init ] && [ ! -x $TARGET/etc/init.d/rcS ]; then
-	echo "Busybox init is used, but there is no executable script at $TARGET/etc/init.d/rcS! Aborting..."
+if [ -L $ISOFS/init ] && [ ! -x $ISOFS/etc/init.d/rcS ]; then
+	echo "Busybox init is used, but there is no executable script at $ISOFS/etc/init.d/rcS! Aborting..."
 	exit 1
 fi
 
@@ -105,8 +108,8 @@ fi
 
 cat <<EOF > gd-kconfig.patch
 CONFIG_BLK_DEV_INITRD=y
-# Target as used by gd-mkisofs.sh
-CONFIG_INITRAMFS_SOURCE="$TARGET"
+# ISOFS as used by gd-mkisofs.sh
+CONFIG_INITRAMFS_SOURCE="$ISOFS"
 CONFIG_DEFAULT_HOSTNAME="gd"
 EOF
 
@@ -133,6 +136,11 @@ if ! make -j$JOBS isoimage; then
 	echo "!!! Build of kernel image failed..."
 	restore_cfg 4
 fi
+
+if [ ! -d $DEST ]; then
+	mkdir -pv $DEST || restore_cfg 3
+fi
+
 cp -av arch/x86/boot/image.iso $DEST || restore_cfg 3
 
 restore_cfg 0
