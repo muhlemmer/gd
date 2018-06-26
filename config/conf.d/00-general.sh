@@ -26,4 +26,6 @@
 # TEMP=/var/tmp/gd
 
 # Commands to be included in initramfs
-COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk"
+COMMANDS="busybox mkfs.ext2 mkfs.ext3 mkfs.ext4 mkfs.btrfs btrfs sfdisk strace"
+
+TARGET="x86_64-nomultilib-linux-uclibc"
