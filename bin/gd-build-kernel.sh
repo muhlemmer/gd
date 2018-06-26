@@ -23,12 +23,11 @@ KCONFIG_BACKUP=true
 CLEAN=true
 MENUCONFIG=false
 JOBS=1
-if [ -d $ETC/conf.d ]; then
-	for file in $ETC/conf.d/*.sh; do
-		source $file
-	done
+ETC="/etc/gd"
+if [ -e $ETC/gd.conf ]; then
+	source $ETC/gd.conf
 else
-	echo "conf.d not found, skipping." 1>&2
+	echo "Configuration file not found, skipping." 1>&2
 fi
 
 if [ -z "$DEST" ]; then
