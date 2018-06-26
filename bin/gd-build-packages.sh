@@ -62,5 +62,13 @@ fi
 cp -av /etc/gd/portage /usr/$TARGET/etc || exit 3
 
 echo "Building packages" 1>&2
-$TARGET-emerge $EMERGE_OPTS app-shells/bash sys-apps/file sys-apps/which $PACKAGES
-exit $?
+$TARGET-emerge $EMERGE_OPTS app-shells/bash sys-apps/file $PACKAGES || exit $?
+
+# Create symlinks to use busybox invocations for the tools used in gd-list-files.sh
+apps="grep realpath awk cut which"
+for a in $apps; do
+	sl="/usr/$TARGET/bin/$a"
+	if [ ! -e $sl ]; then
+		ln -sv /bin/busybox $sl || exit 3
+	fi
+done
