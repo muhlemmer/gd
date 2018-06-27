@@ -56,8 +56,14 @@ fi
 if $cd; then
 	crossdev --stable -t $TARGET || exit 3
 fi
-# Copy over our own make.conf
+# Copy over our own portage settings
 cp -av /etc/gd/portage /usr/$TARGET/etc || exit 3
+cd "/usr/$TARGET/etc/portage" || exit 1
+if ( echo "CHOST=$TARGET" | cat - make.conf > temp ); then
+	mv temp make.conf || exit 3
+else
+	exit 3
+fi
 
 echo "Building packages" 1>&2
 $TARGET-emerge $EMERGE_OPTS app-shells/bash sys-apps/file $PACKAGES || exit $?
